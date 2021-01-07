@@ -6,9 +6,18 @@ import (
 	//Data vertex
 )
 
+
+//get the config
+
+//load
+
+
+//start
 func main() {
 	gin.SetMode(gin.ReleaseMode)
-	config := nil
+	//create config
+	config := nil //read everythimng from app config
+
 	applicationVertex := CreateDataVertex(config)
 	r := gin.Default()
 	go r.POST("/query", applicationVertex.query())
