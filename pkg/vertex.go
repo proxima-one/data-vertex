@@ -3,7 +3,7 @@ package main
 import (
 	_ "os"
 	proxima "github.com/proxima-one/proxima-db-client-go"
-	_ resolver "github.com/proxima-one/proxima-data-vertex/pkg/resolvers"
+	_ "github.com/proxima-one/proxima-data-vertex/pkg/resolvers"
 	dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
 	"github.com/99designs/gqlgen/handler"
 	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql" //gql

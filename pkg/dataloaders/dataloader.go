@@ -2,8 +2,8 @@ package dataloader
 
 import (
   //cache "github.com/patrickmn/go-cache"
-  _ models "github.com/proxima-one/proxima-data-vertex/pkg/models"
-  _ json "github.com/json-iterator/go"
+  _ "github.com/proxima-one/proxima-data-vertex/pkg/models"
+  _ "github.com/json-iterator/go"
   proxima "github.com/proxima-one/proxima-db-client-go"
 )
 
