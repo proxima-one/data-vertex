@@ -40,15 +40,15 @@ func (vertex *ProximaDataVertex) playgroundHandler() gin.HandlerFunc {
 	}
 }
 
-func CreateDataVertex(config map[string]interface{}) (ProximaDataVertex, error) {
-	database, _ := CreateDatabase(config)
+func CreateDataVertex(config, dbConfig map[string]interface{}) (ProximaDataVertex, error) {
+	database, _ := CreateDatabase(dbConfig)
 	resolvers, _ := CreateResolvers(database)
 	//executableSchema
-	 c := Config{
+	 c := gql.Config{
 		Resolvers: &resolvers
 		}
 
-	 return ProximaDataVertex{name: config['name'], id: config.id , version: config.version, applicationDB: database, executableSchema: c}, nil
+	 return ProximaDataVertex{name: config['name'], id: config['id'] , version: config['version'], applicationDB: database, executableSchema: c}, nil
 }
 
 
