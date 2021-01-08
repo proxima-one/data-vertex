@@ -1,20 +1,12 @@
-/*
-Data Vertex
-- Database creation
-  - Tables
-- DApp aggregator
-- Dataloaders and resolvers (config)
-*/
-
 package main
 
 import (
-	"os"
+	_ "os"
 	proxima "github.com/proxima-one/proxima-db-client-go"
-	resolver "github.com/proxima-one/proxima-data-vertex/pkg/resolvers" //change these
-	dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloader"
-  gql "github.com/proxima-one/proxima-data-vertex/pkg/gql"
+	_ resolver "github.com/proxima-one/proxima-data-vertex/pkg/resolvers"
+	dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
 	"github.com/99designs/gqlgen/handler"
+	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql" //gql
 )
 
 //Structure and schema of the vertex

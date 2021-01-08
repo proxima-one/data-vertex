@@ -1,4 +1,4 @@
-module github.com/proxima-one/binance-chain-subgraph
+module github.com/proxima-one/proxima-data-vertex
 
 require (
 	github.com/99designs/gqlgen v0.10.1
