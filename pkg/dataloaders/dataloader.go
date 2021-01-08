@@ -13,7 +13,7 @@ type Dataloader struct {
 
 func NewDataloader(db *proxima.ProximaDB) (*Dataloader, error) {
 	return &Dataloader{
-		db: db
+		db: db,
 	}, nil
 }
 
