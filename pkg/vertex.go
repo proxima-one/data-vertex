@@ -3,7 +3,7 @@ package main
 import (
 	_ "os"
 	proxima "github.com/proxima-one/proxima-db-client-go"
-	_ "github.com/proxima-one/proxima-data-vertex/pkg/resolvers"
+	resolver "github.com/proxima-one/proxima-data-vertex/pkg/resolvers"
 	dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
 	"github.com/99designs/gqlgen/handler"
 	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql" //gql
@@ -40,38 +40,29 @@ func (vertex *ProximaDataVertex) playgroundHandler() gin.HandlerFunc {
 	}
 }
 
-func CreateDataVertex(config, dbConfig map[string]interface{}) (ProximaDataVertex, error) {
-	database, _ := CreateDatabase(dbConfig)
-	resolvers, _ := CreateResolvers(database)
-	//executableSchema
-	 c := gql.Config{
-		Resolvers: &resolvers
-		}
 
-	 return ProximaDataVertex{name: config['name'], id: config['id'] , version: config['version'], applicationDB: database, executableSchema: c}, nil
-}
 
 
 //Database of the vertex...
-func CreateDatabase(db_config) {
-	//load, then init
-	//database creation
-	//database start()
-	//return database
+func CreateDatabase(db_config map[string]interface{}) (*proxima.ProximaDB, error) {
 	ip := getEnv("DB_ADDRESS" , "0.0.0.0")
 	port :=  getEnv("DB_PORT", "50051")
-	proximaDB := proxima.NewProximaDB(ip, port)
-	_, err := proximaDB.OpenAll(tableList)
+	proximaServiceClient, _ := proxima.DefaultProximaServiceClient(ip, port)
+	proximaDB, err := proxima.DBFromConfig(proximaServiceClient, db_config)
 	if err != nil {
-		return proximaDB, err
+		return nil, err
 	}
+	proximaDB.start()
 	return proximaDB, nil
 }
 
 //executableSchema, dataloader is needed as well
-func CreateResolvers(db *proxima.ProximaDB) (gql.Config) {
-	loader, _  := CreateDataloaders(db)
-	return resolver.NewResolver(loader, db)
+func CreateResolvers(db *proxima.ProximaDB) (gql.Config, error) {
+	loader, err  := CreateDataloaders(db)
+	if err != nil {
+		return nil, err
+	}
+	return resolver.NewResolver(loader, db), nil
 }
 
 func CreateDataloaders(db *proxima.ProximaDB) (*dataloader.Dataloader, error) {
@@ -80,4 +71,13 @@ func CreateDataloaders(db *proxima.ProximaDB) (*dataloader.Dataloader, error) {
     return nil, err
   }
   return loader, nil
+}
+
+func CreateDataVertex(config, dbConfig map[string]interface{}) (*ProximaDataVertex, error) {
+	database, _ := CreateDatabase(dbConfig)
+	resolvers, _ := CreateResolvers(database)
+	exec := gql.NewExecutableSchema(resolvers)
+
+	 newVertex := &ProximaDataVertex{name: config["name"], id: config["id"] , version: config["version"], applicationDB: database, executableSchema: exec}, nil
+	 return newVertex, nil
 }

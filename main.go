@@ -3,22 +3,39 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/99designs/gqlgen/handler"
-	//Data vertex
 )
 
-
 //get the config
+func getConfig(configPath string) (map[string]interface{}, error) {
+	file, err := os.Open(configPath)
+	var objmap map[string]interface{}
+	err := json.Unmarshal(data, &objmap)
+	if err != nil {
+		return nil, nil
+	}
+	return objmap, nil
+}
 
-//load
-
+func getDBConfig(configPath string) (map[string]interface{}, error) {
+	file, err := os.Open(configPath)
+	var objmap map[string]interface{}
+	err = json.Unmarshal(data, &objmap)
+	if err != nil {
+		return nil, nil
+	}
+	return objmap, nil
+}
 
 //start
 func main() {
 	gin.SetMode(gin.ReleaseMode)
-	//create config
-	config := nil //read everythimng from app config
+	configPath := "../app-config.yml"
+	dbConfigPath := "../database/db-config.yaml"
+	config :=  getConfig(configFilePath)
+	dbConfig := getDBConfig(dbConfigFilePath)
 
-	applicationVertex := CreateDataVertex(config)
+	applicationVertex, _ := CreateDataVertex(config, dbConfig)
+
 	r := gin.Default()
 	go r.POST("/query", applicationVertex.query())
 	go r.GET("/", playgroundHandler())
