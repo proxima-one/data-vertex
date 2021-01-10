@@ -1,15 +1,17 @@
 package main
 
 import (
+	"os"
 	"github.com/gin-gonic/gin"
 	"github.com/99designs/gqlgen/handler"
+	yaml "gopkg.in/yaml.v2"
 )
 
 //get the config
 func getConfig(configPath string) (map[string]interface{}, error) {
 	file, err := os.Open(configPath)
 	var objmap map[string]interface{}
-	err := json.Unmarshal(data, &objmap)
+	err := yaml.Unmarshal(data, &objmap)
 	if err != nil {
 		return nil, nil
 	}
@@ -19,7 +21,7 @@ func getConfig(configPath string) (map[string]interface{}, error) {
 func getDBConfig(configPath string) (map[string]interface{}, error) {
 	file, err := os.Open(configPath)
 	var objmap map[string]interface{}
-	err = json.Unmarshal(data, &objmap)
+	err = yaml.Unmarshal(data, &objmap)
 	if err != nil {
 		return nil, nil
 	}

@@ -7,6 +7,7 @@ import (
 	dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
 	"github.com/99designs/gqlgen/handler"
 	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql" //gql
+	//yaml
 )
 
 //Structure and schema of the vertex
@@ -39,9 +40,6 @@ func (vertex *ProximaDataVertex) playgroundHandler() gin.HandlerFunc {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
 }
-
-
-
 
 //Database of the vertex...
 func CreateDatabase(db_config map[string]interface{}) (*proxima.ProximaDB, error) {
@@ -77,7 +75,6 @@ func CreateDataVertex(config, dbConfig map[string]interface{}) (*ProximaDataVert
 	database, _ := CreateDatabase(dbConfig)
 	resolvers, _ := CreateResolvers(database)
 	exec := gql.NewExecutableSchema(resolvers)
-
-	 newVertex := &ProximaDataVertex{name: config["name"], id: config["id"] , version: config["version"], applicationDB: database, executableSchema: exec}, nil
-	 return newVertex, nil
+	newVertex := &ProximaDataVertex{name: config["name"], id: config["id"] , version: config["version"], applicationDB: database, executableSchema: exec}, nil
+	return newVertex, nil
 }
