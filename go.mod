@@ -12,6 +12,7 @@ require (
 	golang.org/x/net v0.0.0-20190628185345-da137c7871d7 // indirect
 	golang.org/x/sys v0.0.0-20190412213103-97732733099d // indirect
 	google.golang.org/genproto v0.0.0-20181029155118-b69ba1387ce2 // indirect
+	gopkg.in/yaml.v2 v2.2.2
 )
 
 go 1.13

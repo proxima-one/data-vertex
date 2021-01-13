@@ -3,22 +3,12 @@ package main
 import (
 	"os"
 	"github.com/gin-gonic/gin"
-	"github.com/99designs/gqlgen/handler"
+	vertex "github.com/proxima-one/proxima-data-vertex/pkg/vertex"
 	yaml "gopkg.in/yaml.v2"
 )
 
 func getConfig(configPath string) (map[string]interface{}, error) {
-	file, err := os.Open(configPath)
-	var objmap map[string]interface{}
-	err := yaml.Unmarshal(data, &objmap)
-	if err != nil {
-		return nil, nil
-	}
-	return objmap, nil
-}
-
-func getDBConfig(configPath string) (map[string]interface{}, error) {
-	file, err := os.Open(configPath)
+	data, err := os.Open(configPath)
 	var objmap map[string]interface{}
 	err = yaml.Unmarshal(data, &objmap)
 	if err != nil {
@@ -27,23 +17,36 @@ func getDBConfig(configPath string) (map[string]interface{}, error) {
 	return objmap, nil
 }
 
-func main() {
-	gin.SetMode(gin.ReleaseMode)
-	configPath := "./app-config.yml"
-	dbConfigPath := "./database/db-config.yaml"
-
-	config, configErr :=  getConfig(configFilePath)
-	if configErr != nil {
-		return nil, configErr
-	}
-	dbConfig, dbErr := getDBConfig(dbConfigFilePath)
-	if dbErr != nil {
-		return nil, dbErr
-	}
-	applicationVertex, err := CreateDataVertex(config, dbConfig)
+func getDBConfig(configPath string) (map[string]interface{}, error) {
+	data, err := os.Open(configPath)
 	if err != nil {
 		return nil, err
 	}
+	var objmap map[string]interface{};
+	err = yaml.Unmarshal(data, &objmap)
+	if err != nil {
+		return nil, err
+	}
+	return objmap, nil
+}
+
+func main() {
+	gin.SetMode(gin.ReleaseMode)
+	configFilePath := "./app-config.yml"
+	dbConfigFilePath := "./database/db-config.yaml"
+
+	config, configErr :=  getConfig(configFilePath)
+	// if configErr != nil {
+	// 	return nil, configErr
+	// }
+	dbConfig, dbErr := getDBConfig(dbConfigFilePath)
+	// if dbErr != nil {
+	// 	return nil, dbErr
+	// }
+	applicationVertex, err := vertex.CreateDataVertex(config, dbConfig)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	applicationVertex.startVertexServer()
 }

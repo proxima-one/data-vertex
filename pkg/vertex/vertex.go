@@ -1,4 +1,4 @@
-package main
+package vertex
 
 import (
 	proxima "github.com/proxima-one/proxima-db-client-go"
@@ -17,7 +17,7 @@ type ProximaDataVertex struct {
 }
 
 func CreateDataVertex(config, dbConfig map[string]interface{}) (*ProximaDataVertex, error) {
-	database, dErr := CreateDatabase(dbConfig)
+	database, dErr := CreateApplicationDatabase(dbConfig)
 	if dErr != nil {
 		return nil, dErr
 	}
@@ -47,11 +47,11 @@ func CreateDataloaders(db *proxima.ProximaDB) (*dataloader.Dataloader, error) {
 }
 
 func CreateApplicationDatabase(db_config map[string]interface{}) (*proxima.ProximaDB, error) {
-	proximaDB, err := proxima.DBFromConfig(db_config)
+	proximaDB, err := proxima.LoadApplicationDatabase(db_config)
 	if err != nil {
 		return nil, err
 	}
-	proximaDB.start()
+	proximaDB.Sync();
 	return proximaDB, nil
 }
 

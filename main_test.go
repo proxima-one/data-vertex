@@ -1,4 +1,4 @@
-package proxima_db_client_go
+package main
 
 import (
   "testing"
