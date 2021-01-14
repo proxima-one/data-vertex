@@ -10,7 +10,7 @@ import (
 func getConfig(configPath string) (map[string]interface{}, error) {
 	data, err := os.Open(configPath)
 	var objmap map[string]interface{}
-	err = yaml.Unmarshal(data, &objmap)
+	err = yaml.Unmarshal([]byte(data), &objmap)
 	if err != nil {
 		return nil, nil
 	}
@@ -23,7 +23,7 @@ func getDBConfig(configPath string) (map[string]interface{}, error) {
 		return nil, err
 	}
 	var objmap map[string]interface{};
-	err = yaml.Unmarshal(data, &objmap)
+	err = yaml.Unmarshal([]byte(data), &objmap)
 	if err != nil {
 		return nil, err
 	}
@@ -36,29 +36,16 @@ func main() {
 	dbConfigFilePath := "./database/db-config.yaml"
 
 	config, configErr :=  getConfig(configFilePath)
-	// if configErr != nil {
-	// 	return nil, configErr
-	// }
+	if configErr != nil {
+		log.Fatalf("Application config reading error: %v", configErr)
+	}
 	dbConfig, dbErr := getDBConfig(dbConfigFilePath)
-	// if dbErr != nil {
-	// 	return nil, dbErr
-	// }
+	if dbErr != nil {
+		log.Fatalf("Database config readig error: %v", dbErr)
+	}
 	applicationVertex, err := vertex.CreateDataVertex(config, dbConfig)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
+	if err != nil {
+		log.Fatalf("Data vertex creation error: %v", err)
+	}
 	applicationVertex.startVertexServer()
 }
-
-// r := gin.Default()
-// go r.POST("/query", applicationVertex.query())
-// go r.GET("/", playgroundHandler())
-// r.Run(":4000")
-
-// func playgroundHandler() gin.HandlerFunc {
-// 	h := handler.Playground("GraphQL", "/query")
-// 	return func(c *gin.Context) {
-// 		h.ServeHTTP(c.Writer, c.Request)
-// 	}
-// }

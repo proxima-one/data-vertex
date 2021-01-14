@@ -55,18 +55,6 @@ func CreateApplicationDatabase(db_config map[string]interface{}) (*proxima.Proxi
 	return proximaDB, nil
 }
 
-
-// ip, port := GetDatabaseServiceClient()
-// proximaServiceClient, serviceErr := proxima.DefaultProximaServiceClient(ip, port)
-// if serviceErr != nil {
-// 	return nil, serviceErr
-// }
-// func GetDatabaseServiceClient() (string, string){
-// 	ip := getEnv("DB_ADDRESS" , "0.0.0.0")
-// 	port :=  getEnv("DB_PORT", "50051")
-// 	return ip, port
-// }
-
 func (vertex *ProximaDataVertex) startVertexServer() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
