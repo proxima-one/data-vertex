@@ -1,19 +1,21 @@
 package vertex
 
 import (
-	proxima "github.com/proxima-one/proxima-db-client-go"
+	proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
 	resolver "github.com/proxima-one/proxima-data-vertex/pkg/resolvers"
 	dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
 	"github.com/99designs/gqlgen/handler"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/gin-gonic/gin"
 	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql"
 )
 
 type ProximaDataVertex struct {
-  name *string
-  id *string
-  version *string
-  applicationDB *ProximaDB
-	executableSchema *gql.Exec
+  name string
+  id string
+  version string
+  applicationDB *proxima.ProximaDatabase
+	executableSchema *graphql.ExecutableSchema
 }
 
 func CreateDataVertex(config, dbConfig map[string]interface{}) (*ProximaDataVertex, error) {
@@ -30,7 +32,7 @@ func CreateDataVertex(config, dbConfig map[string]interface{}) (*ProximaDataVert
 	return newVertex, nil
 }
 
-func CreateResolvers(db *proxima.ProximaDB) (gql.Config, error) {
+func CreateResolvers(db *proxima.ProximaDatabase) (gql.Config, error) {
 	loader, err  := CreateDataloaders(db)
 	if err != nil {
 		return nil, err
@@ -38,7 +40,7 @@ func CreateResolvers(db *proxima.ProximaDB) (gql.Config, error) {
 	return resolver.NewResolver(loader, db), nil
 }
 
-func CreateDataloaders(db *proxima.ProximaDB) (*dataloader.Dataloader, error) {
+func CreateDataloaders(db *proxima.ProximaDatabase) (*dataloader.Dataloader, error) {
   loader , err := dataloader.NewDataloader(db)
   if err != nil {
     return nil, err
@@ -46,12 +48,12 @@ func CreateDataloaders(db *proxima.ProximaDB) (*dataloader.Dataloader, error) {
   return loader, nil
 }
 
-func CreateApplicationDatabase(db_config map[string]interface{}) (*proxima.ProximaDB, error) {
-	proximaDB, err := proxima.LoadApplicationDatabase(db_config)
+func CreateApplicationDatabase(db_config map[string]interface{}) (*proxima.ProximaDatabase, error) {
+	proximaDB, err := proxima.LoadProximaDatabase(db_config)
 	if err != nil {
 		return nil, err
 	}
-	proximaDB.Sync();
+	proximaDB.Sync()
 	return proximaDB, nil
 }
 

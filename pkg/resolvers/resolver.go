@@ -13,7 +13,7 @@ type Resolver struct{
 	loader *dataloader.Dataloader
 }
 
-func (r *Resolver) Query() gql.QueryResolver {
+func (r *Resolver) Query() *queryResolver {
 	return &queryResolver{r}
 }
 

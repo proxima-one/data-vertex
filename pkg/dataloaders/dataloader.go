@@ -3,14 +3,14 @@ package dataloader
 import (
   _ "github.com/proxima-one/proxima-data-vertex/pkg/models"
   _ "github.com/json-iterator/go"
-  proxima "github.com/proxima-one/proxima-db-client-go"
+  proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
 )
 
 type Dataloader struct {
-	db *proxima.ProximaDB
+	db *proxima.ProximaDatabase
 }
 
-func NewDataloader(db *proxima.ProximaDB) (*Dataloader, error) {
+func NewDataloader(db *proxima.ProximaDatabase) (*Dataloader, error) {
 	return &Dataloader{
 		db: db,
 	}, nil
