@@ -30,6 +30,23 @@ func getDBConfig(configPath string) (map[string]interface{}, error) {
 	return objmap, nil
 }
 
+func LoadDataVertex(appConfigFile, dbConfigFile string) (*ProximaDataVertex, error) {
+	config, configErr :=  getConfig(configFilePath)
+	if configErr != nil {
+		log.Fatalf("Application config reading error: %v", configErr)
+	}
+	dbConfig, dbErr := getDBConfig(dbConfigFilePath)
+	if dbErr != nil {
+		log.Fatalf("Database config readig error: %v", dbErr)
+	}
+	applicationVertex, err := vertex.CreateDataVertex(config, dbConfig)
+	if err != nil {
+		log.Fatalf("Data vertex creation error: %v", err)
+
+	}
+	return applicationVertex, err
+}
+
 func main() {
 	gin.SetMode(gin.ReleaseMode)
 	configFilePath := "./app-config.yml"

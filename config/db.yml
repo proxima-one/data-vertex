@@ -1,7 +1,0 @@
-datasources:
-  name: "Binance"
-  chain: "Binance chain"
-  network: "Test"
-  url:
-    - uri: "https://dex.binance.org"
-    - port: "80"

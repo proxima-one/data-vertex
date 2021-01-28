@@ -1,7 +1,0 @@
-database: ""
-
-tables:
-  - name:
-    cache:
-    compression:
-  -
