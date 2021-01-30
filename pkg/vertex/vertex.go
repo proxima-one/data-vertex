@@ -8,14 +8,95 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gin-gonic/gin"
 	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql"
+	"io/ioutil"
+	yaml "gopkg.in/yaml.v2"
+	"log"
+	"fmt"
+
 )
+
+func LoadDataVertex(configFilePath, dbConfigFilePath string) (*ProximaDataVertex, error) {
+	config, configErr :=  getConfig(configFilePath)
+	if configErr != nil {
+		log.Fatalf("Application config reading error: %v", configErr)
+	}
+	dbConfig, dbErr := getDBConfig(dbConfigFilePath)
+	if dbErr != nil {
+		log.Fatalf("Database config readig error: %v", dbErr)
+	}
+	applicationVertex, err := CreateDataVertex(config, dbConfig)
+	if err != nil {
+		log.Fatalf("Data vertex creation error: %v", err)
+
+	}
+	return applicationVertex, err
+}
+
+func getConfig(configPath string) (map[string]interface{}, error) {
+	data, err := ioutil.ReadFile(configPath)
+	if err != nil {
+		return make(map[string]interface{}), nil
+	}
+
+
+	var objmap map[interface{}]interface{}
+	err = yaml.Unmarshal([]byte(data), &objmap)
+	var configMap map[string]interface{} = ConvertMapTo(objmap)
+	return configMap, nil
+}
+
+func getDBConfig(configPath string) (map[string]interface{}, error) {
+	data, err := ioutil.ReadFile(configPath)
+	if err != nil {
+		return make(map[string]interface{}), nil
+	}
+	var objmap map[interface{}]interface{}
+	//convert config j2, err := yaml.YAMLToJSON(y)
+	err = yaml.Unmarshal([]byte(data), &objmap)
+	var configMap map[string]interface{} = ConvertMapTo(objmap)
+	//fmt.Println(fmt.Sprintf("%T", configMap))
+	return configMap, nil
+}
+
+func ConvertMapTo(inputMap map[interface{}]interface{}) (map[string]interface{}) {
+	var configMap map[string]interface{} = make(map[string]interface{})
+	var key string
+	for k, value := range inputMap {
+		key = k.(string)
+		valueType := fmt.Sprintf("%T", value)
+		newValue := value
+		if valueType == "map[interface  {}]interface {}" {
+			fmt.Println(value)
+			var strMap map[string]interface{} = ConvertMapTo(value.(map[interface{}]interface{}))
+			configMap[key] = strMap
+			fmt.Println(fmt.Sprintf("Value of map: %T", strMap))
+		}
+		if valueType == "[]interface {}" {
+			newValue := make([]interface{}, len(value.([]interface{})))
+			for i, v := range value.([]interface{}) {
+					newV := v
+					//fmt.Println(newV)
+					if fmt.Sprintf("%T", v) == "map[interface {}]interface {}" {
+						var strMap map[string]interface{} = ConvertMapTo(v.(map[interface{}]interface{}))
+						newValue[i] = strMap
+
+					} else {
+						newValue[i] = newV
+					}
+				}
+		}
+
+		configMap[key] = newValue
+	}
+	return configMap
+}
 
 type ProximaDataVertex struct {
   name string
   id string
   version string
   applicationDB *proxima.ProximaDatabase
-	executableSchema *graphql.ExecutableSchema
+	executableSchema graphql.ExecutableSchema
 }
 
 func CreateDataVertex(config, dbConfig map[string]interface{}) (*ProximaDataVertex, error) {
@@ -33,11 +114,12 @@ func CreateDataVertex(config, dbConfig map[string]interface{}) (*ProximaDataVert
 }
 
 func CreateResolvers(db *proxima.ProximaDatabase) (gql.Config, error) {
+	var gqlConfig gql.Config
 	loader, err  := CreateDataloaders(db)
 	if err != nil {
-		return nil, err
+		return gqlConfig, err
 	}
-	return resolver.NewResolver(loader, db), nil
+	return resolver.NewResolver(loader), nil
 }
 
 func CreateDataloaders(db *proxima.ProximaDatabase) (*dataloader.Dataloader, error) {
@@ -53,11 +135,11 @@ func CreateApplicationDatabase(db_config map[string]interface{}) (*proxima.Proxi
 	if err != nil {
 		return nil, err
 	}
-	proximaDB.Sync()
+	//proximaDB.Sync()
 	return proximaDB, nil
 }
 
-func (vertex *ProximaDataVertex) startVertexServer() {
+func (vertex *ProximaDataVertex) StartVertexServer() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	go r.POST("/query", vertex.query())

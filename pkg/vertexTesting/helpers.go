@@ -14,6 +14,8 @@ import (
 	"github.com/graph-gophers/graphql-go/errors"
 )
 
+
+
 func NewDefaultTestCase(schema *graphql.Schema, queryString, operationName, expectedResult string, vars map[string]interface{}) (*Test) {
 	return &Test{Context: context.TODO(), Schema: schema, Query: queryString,
 		 OperationName: operationName, Variables: vars, ExpectedResult: expectedResult, ExpectedErrors: nil}
