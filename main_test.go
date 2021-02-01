@@ -1,12 +1,12 @@
 package proxima_data_vertex
 
-import (
-  "testing"
-  _ "math/rand"
-  _ "fmt"
-  _ "time"
-  vertexTesting "github.com/proxima-one/proxima-data-vertex/pkg/vertexTesting"
-)
+// import (
+//   "testing"
+//   _ "math/rand"
+//   _ "fmt"
+//   _ "time"
+//   vertexTesting "github.com/proxima-one/proxima-data-vertex/pkg/vertexTesting"
+// )
 
 
 //

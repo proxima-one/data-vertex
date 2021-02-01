@@ -52,7 +52,7 @@ func TestDataVertex(t *testing.T) {
 
 func TestLoadDataVertex(t *testing.T) {
   //homeDir
-  var configFilePath string = "../app-config.yml"
+  var configFilePath string = "../../app-config.yml"
   var dbConfigFilePath string = "../database/db-config.yaml"
 
   applicationVertex, err := LoadDataVertex(configFilePath, dbConfigFilePath)

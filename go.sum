@@ -26,6 +26,8 @@ github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymF
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.9-0.20201210154907-fd9021fe5dad/go.mod h1:cXg6YxExXjJnVBQHBLXeUAgxn2UodCpnH306RInaBQk=
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
+github.com/ghodss/yaml v1.0.0 h1:wQHKEahhL6wmXdzwWG11gIVCkOv05bNOh+Rxn0yngAk=
+github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/gin-contrib/sse v0.0.0-20190301062529-5545eab6dad3 h1:t8FVkw33L+wilf2QiWkw0UV77qRpcH/JHPKGpKa2E8g=
 github.com/gin-contrib/sse v0.0.0-20190301062529-5545eab6dad3/go.mod h1:VJ0WA2NBN22VlZ2dKZQPAPnyWw5XTlK1KymzLKsr59s=
 github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=
@@ -135,6 +137,8 @@ github.com/proxima-one/proxima-db-client-go v0.0.0-20210126234547-701ed4579d7b h
 github.com/proxima-one/proxima-db-client-go v0.0.0-20210126234547-701ed4579d7b/go.mod h1:+i4TSSVAjGxyh/a1JxwGONrK13yLxijPCT5qp53MKvs=
 github.com/proxima-one/proxima-db-client-go v0.0.0-20210129021054-234acbf9837e h1:isirVxNRoLdZvJvVV+YiB6CTkatYfa6HH1epqa4o5q8=
 github.com/proxima-one/proxima-db-client-go v0.0.0-20210129021054-234acbf9837e/go.mod h1:+i4TSSVAjGxyh/a1JxwGONrK13yLxijPCT5qp53MKvs=
+github.com/proxima-one/proxima-db-client-go v0.0.0-20210201010042-df42bc81139c h1:e5l/wSNPtSzagEweIfiVBjVCKuB3IHxDbXy5CqvkbVw=
+github.com/proxima-one/proxima-db-client-go v0.0.0-20210201010042-df42bc81139c/go.mod h1:+i4TSSVAjGxyh/a1JxwGONrK13yLxijPCT5qp53MKvs=
 github.com/rs/cors v1.6.0/go.mod h1:gFx+x8UowdsKA9AchylcLynDq+nNFfI8FkUZdN/jGCU=
 github.com/russross/blackfriday/v2 v2.0.1/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/sergi/go-diff v1.0.0 h1:Kpca3qRNrduNnOQeazBd0ysaKrUJiIuISHxogkT9RPQ=

@@ -9,7 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql"
 	"io/ioutil"
-	yaml "gopkg.in/yaml.v2"
+	//yaml "gopkg.in/yaml.v2"
+	yaml "github.com/ghodss/yaml"
+	json "encoding/json"
 	"log"
 	"fmt"
 
@@ -27,7 +29,6 @@ func LoadDataVertex(configFilePath, dbConfigFilePath string) (*ProximaDataVertex
 	applicationVertex, err := CreateDataVertex(config, dbConfig)
 	if err != nil {
 		log.Fatalf("Data vertex creation error: %v", err)
-
 	}
 	return applicationVertex, err
 }
@@ -37,11 +38,13 @@ func getConfig(configPath string) (map[string]interface{}, error) {
 	if err != nil {
 		return make(map[string]interface{}), nil
 	}
-
-
-	var objmap map[interface{}]interface{}
-	err = yaml.Unmarshal([]byte(data), &objmap)
-	var configMap map[string]interface{} = ConvertMapTo(objmap)
+	jsonData, _ := yaml.YAMLToJSON([]byte(data))
+	var configMap map[string]interface{}
+	err = json.Unmarshal(jsonData, &configMap)
+	if err != nil {
+		fmt.Printf("err: %v\n", err)
+		return make(map[string]interface{}), nil
+	}
 	return configMap, nil
 }
 
@@ -50,11 +53,13 @@ func getDBConfig(configPath string) (map[string]interface{}, error) {
 	if err != nil {
 		return make(map[string]interface{}), nil
 	}
-	var objmap map[interface{}]interface{}
-	//convert config j2, err := yaml.YAMLToJSON(y)
-	err = yaml.Unmarshal([]byte(data), &objmap)
-	var configMap map[string]interface{} = ConvertMapTo(objmap)
-	//fmt.Println(fmt.Sprintf("%T", configMap))
+	jsonData, _ := yaml.YAMLToJSON([]byte(data))
+	var configMap map[string]interface{}
+	err = json.Unmarshal(jsonData, &configMap)
+	if err != nil {
+		fmt.Printf("err: %v\n", err)
+		return make(map[string]interface{}), nil
+	}
 	return configMap, nil
 }
 
