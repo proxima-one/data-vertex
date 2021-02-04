@@ -14,14 +14,73 @@ import (
 	"github.com/graph-gophers/graphql-go/errors"
 )
 
-
-
-func NewDefaultTestCase(schema *graphql.Schema, queryString, operationName, expectedResult string, vars map[string]interface{}) (*Test) {
-	return &Test{Context: context.TODO(), Schema: schema, Query: queryString,
-		 OperationName: operationName, Variables: vars, ExpectedResult: expectedResult, ExpectedErrors: nil}
+func NewEntityTestCase(entityConfig map[string]interface{}) (*EntityTestCase, error) {
+	return nil, nil
 }
 
-type Test struct {
+func GenerateRandomOfType(varType string) (interface{}, error) {
+	return nil, nil
+}
+
+func GetEntities(fileName string) (map[string]EntityTestCase, error){
+// 	//read the json file
+// 	//unmarshal file into map[string]
+// 	//for each key, value in entityMap
+// 		//cast map
+// 		//parseEntity
+// 	//return entities, nil
+	return nil, nil
+}
+
+func parseEntity(entityConfig map[string]interface{}) (EntityTestCase, error) {
+	return nil, nil
+}
+
+type EntityTestCase {
+	name string
+	//construction of the entity test case
+		//vars
+
+
+}
+
+func (entityTest *EntityTestCase) runTests() {
+	//for all tests run
+}
+
+func (entityTest *EntityTestCase) generateTests() {
+	//generateTests
+	//generate the entities
+	//get Test
+	//put Test
+	//getAll Test
+	//search Test
+}
+
+func (entityTest *EntityTestCase) generateGetTest() {
+
+}
+
+func (entityTest *EntityTestCase) generatePutTest() {
+
+}
+
+func (entityTest *EntityTestCase) generateGetAllTest() {}
+
+func (entityTest *EntityTestCase) generateSearchTest() {}
+
+
+func (entityTest *EntityTestCase) generateRandomEntity() {}
+
+func (entityTest *EntityTestCase) generateRandomFunctionVars() {}
+
+
+func NewGQLTestCase(schema *graphql.Schema, queryString, operationName, expectedResult string, vars map[string]interface{}) *GQLTest {
+	return &GQLTest{Context: context.TODO(), Schema: schema, Query: queryString,
+		OperationName: operationName, Variables: vars, ExpectedResult: expectedResult, ExpectedErrors: nil}
+}
+
+type GQLTest struct {
 	Context        context.Context
 	Schema         *graphql.Schema
 	Query          string
