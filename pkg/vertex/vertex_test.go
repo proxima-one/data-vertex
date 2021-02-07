@@ -76,12 +76,14 @@ func TestDataVertexResolvers(t *testing.T) {
 	if err != nil {
 		t.Errorf("Data vertex creation error: %v", err)
 	}
-	//get the schema
-	//create the entityTestCases
-	entityTests, entityErr := GetEntities(testConfigFilePath)
+	entityTests, entityErr := GenerateTestEntities(applicationVertex, testConfigFilePath)
 	if entityErr != nil || entityTests == nil {
 		t.Error("Error creating the resolver tests", entityErr)
 	}
+
+  // for name, entityTest := range entityTests {
+  //   go entityTest.generate(100)
+  // }
 
 	for name, entityTest := range entityTests {
 		go entityTest.runTests(t, 100)
