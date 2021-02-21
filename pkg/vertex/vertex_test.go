@@ -85,7 +85,9 @@ func TestDataVertexResolvers(t *testing.T) {
   //   go entityTest.generate(100)
   // }
 
-	for name, entityTest := range entityTests {
-		go entityTest.runTests(t, 100)
-	}
+  RunEntityTestCases(t, entityTests)
+
+	// for name, entityTest := range entityTests {
+	// 	go entityTest.runTests(t, 100)
+	// }
 }

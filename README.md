@@ -1,55 +1,86 @@
-# Proxima Data Vertex
+# Data Vertex
 
-A data vertex provides DApp data in a graphql interface using a specialized set of eventhandlers, resovlers, and a database designed to host the files.
+[![CircleCI](https://circleci.com/gh/proxima-one/ProximaDB.svg?style=svg)](https://circleci.com/gh/proxima-one/ProximaDB)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/facebook/react/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://reactjs.org/docs/how-to-contribute.html#your-first-pull-request)
 
-## Configuration
-- database config
-- name config
-- aggregator configs
-- organization config
+The data vertex handles the requests, updates and maintenance of the decentralized application data index. Developers create data vertices to aggregate, transform and serve indexed data from a blockchain datasource.
 
-- Volume mount
-- config cache, batch processing
+## Quick Start
+//for further information and functionality look at the proxima command-line interface.
 
-## Organization
-- Names and configuration
-  - Authorization
-  - Name and identifier
-  - version
-- *Query handling*
-  - schema
-  - resolvers
-  - query handling
-- *Database*
-  - tables creation (with cache
+### Requirements
+- node
+- docker
+- docker compose
+- go
+- git
 
+### Installation
+`git clone https://github.com/proxima-one/data-vertex.git`
 
-- *DApp aggregator*
-  - handlers for blockchain events
-  - blockchain client
-  - smart contract abi
-  - mutation/updates to schema entities (client schema)
+### Set-up
+The data vertex needs to be set-up such that the database config, the resolvers, and the schema match the requirements of the specified vertex. This is done automatically through the
 
+### Running
 
-## Start-up
-- done through docker  compose
-- Database container
-- DApp aggregator container
-- DApp data vertex container
+Before the data vertex can be run, it must have a docker-compose file that includes the database, the data vertex, and the data aggregator.
 
+`docker-compose up`
 
-docker-componse up (config)
+### Testing
 
+`go test`
 
+### Benchmarking
 
+**To be implemented**
 
-### Query (query the database with the assumption that the data is being passed back as a model)
-- Provide the default query inputs for the query table (args)
-- Given from model resolver
+<!--
+## Structure and interactions
+A data vertex stores DApp data in a graphql interface using a specialized set of eventhandlers, resovlers, and a database designed to host the files.
+## Running
+`docker-compose up`
 
-### Database Resolver/Model Push
-- process the models, so that they can be resolved from JSON, with special respect to the proofs
+## Testing
+`docker-compose up test`
 
-### Database + Cache
-- if not found then get from database and set in the cache
-return the value
+## Benchmarking
+`docker-compose up benchmarks`
+-->
+
+## Design
+
+//data vertex diagram
+
+//
+
+//components
+
+//and schema and queries are pushed to the data vertex
+
+## Contributing
+<!--
+This should include:
+- Contributing Guidelines
+- Code of Conduct
+- Good first issues/Pull requests
+-->
+Read below to learn how you can take part in improving our project.
+
+### Code of Conduct
+
+We have adopted a Code of Conduct that we expect project participants to adhere to. Please read [the full text]() so that you can understand what actions will and will not be tolerated.
+
+### Contributing Guide
+
+Read our [contributing guide]() to learn about our development process, how to propose bugfixes and improvements, and how to build and test your changes.
+
+### Good First Issues
+
+To help you get your feet wet and get you familiar with our contribution process, we have a list of [good first issues]() that contain bugs which have a relatively limited scope. This is a great place to get started.
+
+## Licensing
+
+This project is licensed under MIT licensing guidelines.
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/facebook/react/blob/master/LICENSE)
