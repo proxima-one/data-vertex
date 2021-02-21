@@ -6,8 +6,10 @@
 
 The data vertex handles the requests, updates and maintenance of the decentralized application data index. Developers create data vertices to aggregate, transform and serve indexed data from a blockchain datasource.
 
+
+
 ## Quick Start
-//for further information and functionality look at the proxima command-line interface.
+For further information and functionality look at the proxima command-line interface.
 
 ### Requirements
 - node
@@ -20,13 +22,16 @@ The data vertex handles the requests, updates and maintenance of the decentraliz
 `git clone https://github.com/proxima-one/data-vertex.git`
 
 ### Set-up
-The data vertex needs to be set-up such that the database config, the resolvers, and the schema match the requirements of the specified vertex. This is done automatically through the
+The data vertex needs to be set-up such that the database config, the resolvers, and the schema match the requirements of the specified vertex. This is done automatically through the Proxima CLI.
 
 ### Running
 
 Before the data vertex can be run, it must have a docker-compose file that includes the database, the data vertex, and the data aggregator.
 
 `docker-compose up`
+
+The data vertex should be running on:
+`0.0.0.0:4000`
 
 ### Testing
 
@@ -49,15 +54,6 @@ A data vertex stores DApp data in a graphql interface using a specialized set of
 `docker-compose up benchmarks`
 -->
 
-## Design
-
-//data vertex diagram
-
-//
-
-//components
-
-//and schema and queries are pushed to the data vertex
 
 ## Contributing
 <!--
