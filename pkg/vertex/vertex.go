@@ -1,4 +1,4 @@
-package vertex
+ppackage vertex
 
 import (
 	proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
@@ -119,12 +119,14 @@ func CreateDataVertex(config, dbConfig map[string]interface{}) (*ProximaDataVert
 }
 
 func CreateResolvers(db *proxima.ProximaDatabase) (gql.Config, error) {
-	var gqlConfig gql.Config
+	var r gql.Config
 	loader, err  := CreateDataloaders(db)
 	if err != nil {
-		return gqlConfig, err
+		return r, err
 	}
-	return resolver.NewResolver(loader, db), nil
+	return gql.Config{
+		Resolvers: resolver.NewResolver(loader, db),
+	}, nil
 }
 
 func CreateDataloaders(db *proxima.ProximaDatabase) (*dataloader.Dataloader, error) {
