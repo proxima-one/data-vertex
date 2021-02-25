@@ -1,4 +1,4 @@
-ppackage vertex
+package vertex
 
 import (
 	proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
