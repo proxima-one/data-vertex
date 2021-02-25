@@ -1,7 +1,7 @@
 package resolvers
 //go:generate go run github.com/99designs/gqlgen
 import (
-	models "github.com/proxima-one/proxima-data-vertex/pkg/models"
+	_ "github.com/proxima-one/proxima-data-vertex/pkg/models"
 	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql"
 	dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
 	_ "github.com/json-iterator/go"
