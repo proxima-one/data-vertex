@@ -29,11 +29,6 @@ type queryResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 
 
-func NewResolver(loader *dataloader.Dataloader, db *proxima.ProximaDatabase) (gql.Config) {
-	r := gql.Resolver{}
-	r.loader = loader
-	r.db = db
-	return gql.Config{
-		Resolvers: &r,
-	}
+func NewResolver(loader *dataloader.Dataloader, db *proxima.ProximaDatabase) (gql.ResolverRoot) {
+	return &Resolver{db: db, loader: loader}
 }

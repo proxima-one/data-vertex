@@ -124,7 +124,7 @@ func CreateResolvers(db *proxima.ProximaDatabase) (gql.Config, error) {
 	if err != nil {
 		return gqlConfig, err
 	}
-	return resolver.NewResolver(loader), nil
+	return resolver.NewResolver(loader, db), nil
 }
 
 func CreateDataloaders(db *proxima.ProximaDatabase) (*dataloader.Dataloader, error) {
