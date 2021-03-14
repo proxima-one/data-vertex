@@ -71,10 +71,10 @@ func ConvertMapTo(inputMap map[interface{}]interface{}) (map[string]interface{})
 		valueType := fmt.Sprintf("%T", value)
 		newValue := value
 		if valueType == "map[interface  {}]interface {}" {
-			fmt.Println(value)
+			//fmt.Println(value)
 			var strMap map[string]interface{} = ConvertMapTo(value.(map[interface{}]interface{}))
 			configMap[key] = strMap
-			fmt.Println(fmt.Sprintf("Value of map: %T", strMap))
+			//fmt.Println(fmt.Sprintf("Value of map: %T", strMap))
 		}
 		if valueType == "[]interface {}" {
 			newValue := make([]interface{}, len(value.([]interface{})))
@@ -101,6 +101,8 @@ type ProximaDataVertex struct {
   id string
   version string
   applicationDB *proxima.ProximaDatabase
+	//resolvers resolver.Resolver
+	schema string
 	executableSchema graphql.ExecutableSchema
 }
 
@@ -114,7 +116,7 @@ func CreateDataVertex(config, dbConfig map[string]interface{}) (*ProximaDataVert
 		return nil, rErr
 	}
 	exec := gql.NewExecutableSchema(resolvers)
-	newVertex := &ProximaDataVertex{name: config["name"].(string), id: config["id"].(string) , version: config["version"].(string), applicationDB: database, executableSchema: exec}
+	newVertex := &ProximaDataVertex{name: config["name"].(string), id: config["id"].(string) , version: config["version"].(string), applicationDB: database, executableSchema: exec,}
 	return newVertex, nil
 }
 
@@ -143,6 +145,7 @@ func CreateApplicationDatabase(db_config map[string]interface{}) (*proxima.Proxi
 		return nil, err
 	}
 	//proximaDB.Sync()
+	proximaDB.Open()
 	return proximaDB, nil
 }
 

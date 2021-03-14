@@ -5,7 +5,7 @@ import (
   _ "math/rand"
   _ "fmt"
   _ "time"
-  vertexTesting "github.com/proxima-one/proxima-data-vertex/pkg/vertexTesting"
+  //vertexTesting "github.com/proxima-one/proxima-data-vertex/pkg/vertexTesting"
 )
 
 

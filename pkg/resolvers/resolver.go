@@ -9,7 +9,7 @@ import (
 	_ "fmt"
 )
 
-var DefaultInputs map[string]interface{} = map[string]interface{}{"prove": false, "limit": 100}
+var DefaultInputs map[string]interface{} = map[string]interface{}{"id": "00000000000", "prove": false, "limit": 100}
 
 // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
 type Resolver struct {
