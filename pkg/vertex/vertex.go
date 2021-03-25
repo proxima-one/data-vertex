@@ -1,24 +1,29 @@
 package vertex
 
 import (
-	proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
-	resolver "github.com/proxima-one/proxima-data-vertex/pkg/resolvers"
-	dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
-	"github.com/99designs/gqlgen/handler"
+	"context"
+	"io/ioutil"
+	"net/http"
+
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/99designs/gqlgen/handler"
 	"github.com/gin-gonic/gin"
 	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql"
-	"io/ioutil"
-	//yaml "gopkg.in/yaml.v2"
-	yaml "github.com/ghodss/yaml"
-	json "encoding/json"
-	"log"
-	"fmt"
+	resolver "github.com/proxima-one/proxima-data-vertex/pkg/resolvers"
+	proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
 
+	//yaml "gopkg.in/yaml.v2"
+	"crypto/tls"
+	json "encoding/json"
+	"fmt"
+	"log"
+
+	yaml "github.com/ghodss/yaml"
+	"github.com/rs/cors"
 )
 
 func LoadDataVertex(configFilePath, dbConfigFilePath string) (*ProximaDataVertex, error) {
-	config, configErr :=  getConfig(configFilePath)
+	config, configErr := getConfig(configFilePath)
 	if configErr != nil {
 		log.Fatalf("Application config reading error: %v", configErr)
 	}
@@ -63,7 +68,7 @@ func getDBConfig(configPath string) (map[string]interface{}, error) {
 	return configMap, nil
 }
 
-func ConvertMapTo(inputMap map[interface{}]interface{}) (map[string]interface{}) {
+func ConvertMapTo(inputMap map[interface{}]interface{}) map[string]interface{} {
 	var configMap map[string]interface{} = make(map[string]interface{})
 	var key string
 	for k, value := range inputMap {
@@ -79,16 +84,16 @@ func ConvertMapTo(inputMap map[interface{}]interface{}) (map[string]interface{})
 		if valueType == "[]interface {}" {
 			newValue := make([]interface{}, len(value.([]interface{})))
 			for i, v := range value.([]interface{}) {
-					newV := v
-					//fmt.Println(newV)
-					if fmt.Sprintf("%T", v) == "map[interface {}]interface {}" {
-						var strMap map[string]interface{} = ConvertMapTo(v.(map[interface{}]interface{}))
-						newValue[i] = strMap
+				newV := v
+				//fmt.Println(newV)
+				if fmt.Sprintf("%T", v) == "map[interface {}]interface {}" {
+					var strMap map[string]interface{} = ConvertMapTo(v.(map[interface{}]interface{}))
+					newValue[i] = strMap
 
-					} else {
-						newValue[i] = newV
-					}
+				} else {
+					newValue[i] = newV
 				}
+			}
 		}
 
 		configMap[key] = newValue
@@ -97,12 +102,12 @@ func ConvertMapTo(inputMap map[interface{}]interface{}) (map[string]interface{})
 }
 
 type ProximaDataVertex struct {
-  name string
-  id string
-  version string
-  applicationDB *proxima.ProximaDatabase
+	name          string
+	id            string
+	version       string
+	applicationDB *proxima.ProximaDatabase
 	//resolvers resolver.Resolver
-	schema string
+	schema           string
 	executableSchema graphql.ExecutableSchema
 }
 
@@ -115,50 +120,134 @@ func CreateDataVertex(config, dbConfig map[string]interface{}) (*ProximaDataVert
 	if rErr != nil {
 		return nil, rErr
 	}
+	//middleware
+
+	//
 	exec := gql.NewExecutableSchema(resolvers)
-	newVertex := &ProximaDataVertex{name: config["name"].(string), id: config["id"].(string) , version: config["version"].(string), applicationDB: database, executableSchema: exec,}
+	newVertex := &ProximaDataVertex{name: config["name"].(string), id: config["id"].(string), version: config["version"].(string), applicationDB: database, executableSchema: exec}
 	return newVertex, nil
 }
 
 func CreateResolvers(db *proxima.ProximaDatabase) (gql.Config, error) {
 	var r gql.Config
-	loader, err  := CreateDataloaders(db)
+	loader, err := CreateDataloaders(db)
 	if err != nil {
 		return r, err
 	}
-	return gql.Config{
+	c := gql.Config{
 		Resolvers: resolver.NewResolver(loader, db),
-	}, nil
+	}
+	//Load directives
+	c = LoadDirectives(c)
+
+	return c, nil
 }
 
-func CreateDataloaders(db *proxima.ProximaDatabase) (*dataloader.Dataloader, error) {
-  loader , err := dataloader.NewDataloader(db)
-  if err != nil {
-    return nil, err
-  }
-  return loader, nil
+// //create middleware
+// func LoadMiddleware(configFilePath, middlewareConfig) (error) {
+// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		ctx := context.WithValue(r.Context(), loadersKey, &Loaders{})
+// 			r = r.WithContext(ctx)
+// 			next.ServeHTTP(w, r)
+// 		})
+// 	//dataloaders
+// 	//authentication
+// 	//cors
+// }
+
+func LoadDirectives(c gql.Config) gql.Config {
+	c.Directives.HasRole = func(ctx context.Context, obj interface{}, next graphql.Resolver, role Role) (interface{}, error) {
+		if !getCurrentUser(ctx).HasRole(role) {
+			// 		// block calling the next resolver
+			return nil, fmt.Errorf("Access denied")
+		}
+		//
+		// 	// or let it pass through
+		return next(ctx)
+	}
+	c.Directives.isAuthenticated = func(ctx context.Context, obj interface{}, next graphql.Resolver, role Role) (interface{}, error) {
+		// 	if !getCurrentUser(ctx).HasRole(role) {
+		// // 		// block calling the next resolver
+		// 		return nil, fmt.Errorf("Access denied")
+		// 	}
+		return next(ctx)
+	}
+
+	c.Directives.useDefaultArgs = func(ctx context.Context, obj interface{}, next graphql.Resolver) (interface{}, error) {
+		return next(ctx)
+	}
+
+	return c
+	//add
 }
+
+// func CreateDataloaders(db *proxima.ProximaDatabase) (*dataloader.Dataloader, error) {
+//   loader , err := dataloader.NewDataloader(db)
+//   if err != nil {
+//     return nil, err
+//   }
+//   return loader, nil
+// }
 
 func CreateApplicationDatabase(db_config map[string]interface{}) (*proxima.ProximaDatabase, error) {
 	proximaDB, err := proxima.LoadProximaDatabase(db_config)
 	if err != nil {
 		return nil, err
 	}
-	//proximaDB.Sync()
 	proximaDB.Open()
+	//proximaDB.Sync()
 	return proximaDB, nil
 }
 
 func (vertex *ProximaDataVertex) StartVertexServer() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
+	//server setup
+	// generate a `Certificate` struct
+	//cert, _ := tls.LoadX509KeyPair( "localhost.crt", "localhost.key" )
+
+	// create a custom server with `TLSConfig`
+	s := &http.Server{
+		Addr:    ":4000",
+		Handler: r, // use `http.DefaultServeMux`gin router
+		TLSConfig: &tls.Config{
+			Certificates: []tls.Certificate{},
+		},
+	}
+
+	// srv.AddTransport(&transport.Websocket{
+	// 		Upgrader: websocket.Upgrader{
+	// 				CheckOrigin: func(r *http.Request) bool {
+	// 						// Check against your desired domains here
+	// 						 return r.Host == "example.org"
+	// 				},
+	// 				ReadBufferSize:  1024,
+	// 				WriteBufferSize: 1024,
+	// 		},
+	// })
+
+	//r.Use(auth.Middleware())
+	router.Use(cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:4000"},
+		AllowCredentials: true,
+		Debug:            true,
+	}).Handler)
+
+	r.Use(dataloaders.Middleware(vertex.applicationDB))
+	//r.Use(validation.Middleware())
+
 	go r.POST("/query", vertex.query())
 	go r.GET("/", vertex.playgroundHandler())
-	r.Run(":4000")
+	//run  tl5 with server cert
+	//cert
+	//key
+	r.RunTL5(":4000")
 }
 
 func (vertex *ProximaDataVertex) query() gin.HandlerFunc {
 	h := handler.GraphQL(vertex.executableSchema)
+	//middleware
+	//LoadMiddleware(h, )
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
