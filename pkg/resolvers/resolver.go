@@ -1,12 +1,14 @@
 package resolvers
+
 //go:generate go run github.com/99designs/gqlgen
 import (
-	_ "github.com/proxima-one/proxima-data-vertex/pkg/models"
-	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql"
-	dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
-	proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
-	_ "github.com/json-iterator/go"
 	_ "fmt"
+
+	_ "github.com/json-iterator/go"
+	//dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
+	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql"
+	_ "github.com/proxima-one/proxima-data-vertex/pkg/models"
+	proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
 )
 
 var DefaultInputs map[string]interface{} = map[string]interface{}{"id": "00000000000", "prove": false, "limit": 100}
@@ -14,7 +16,6 @@ var DefaultInputs map[string]interface{} = map[string]interface{}{"id": "0000000
 // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
 type Resolver struct {
 	db *proxima.ProximaDatabase
-	loader *dataloader.Dataloader
 }
 
 func (r *Resolver) Query() gql.QueryResolver {
@@ -28,7 +29,8 @@ func (r *Resolver) Mutation() gql.MutationResolver {
 type queryResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 
+//AUTOGEN RESOLVERS
 
-func NewResolver(loader *dataloader.Dataloader, db *proxima.ProximaDatabase) (gql.ResolverRoot) {
-	return &Resolver{db: db, loader: loader}
+func NewResolver(db *proxima.ProximaDatabase) gql.ResolverRoot {
+	return &Resolver{db: db}
 }

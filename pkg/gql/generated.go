@@ -1,17 +1,21 @@
 package gql
+
 import (
-  "github.com/99designs/gqlgen/graphql"
+	"github.com/99designs/gqlgen/graphql"
 )
 
 type Config struct {
-  Resolvers interface{}
+	Resolvers interface{}
 }
 
 type QueryResolver struct {
-  val bool
+	val bool
+}
+type MutationResolver struct {
+	val bool
 }
 
-func NewExecutableSchema(config Config) (graphql.ExecutableSchema) {
-  config.Resolvers = nil
-  return nil
+func NewExecutableSchema(config Config) graphql.ExecutableSchema {
+	config.Resolvers = nil
+	return nil
 }

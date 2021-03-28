@@ -6,6 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.13.0
 	github.com/agnivade/levenshtein v1.1.0 // indirect
 	github.com/alecthomas/gocyclo v0.0.0-20150208221726-aa8f8b160214 // indirect
+	github.com/alexkohler/nakedret v1.0.0 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
@@ -35,6 +36,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed // indirect
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
+	mvdan.cc/unparam v0.0.0-20210104141923-aac4ce9116a7 // indirect
 )
 
 go 1.13

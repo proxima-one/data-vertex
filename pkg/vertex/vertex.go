@@ -130,12 +130,12 @@ func CreateDataVertex(config, dbConfig map[string]interface{}) (*ProximaDataVert
 
 func CreateResolvers(db *proxima.ProximaDatabase) (gql.Config, error) {
 	var r gql.Config
-	loader, err := CreateDataloaders(db)
-	if err != nil {
-		return r, err
-	}
+	// loader, err := CreateDataloaders(db)
+	// if err != nil {
+	// 	return r, err
+	// }
 	c := gql.Config{
-		Resolvers: resolver.NewResolver(loader, db),
+		Resolvers: resolver.NewResolver(db),
 	}
 	//Load directives
 	c = LoadDirectives(c)
@@ -176,6 +176,8 @@ func LoadDirectives(c gql.Config) gql.Config {
 	c.Directives.useDefaultArgs = func(ctx context.Context, obj interface{}, next graphql.Resolver) (interface{}, error) {
 		return next(ctx)
 	}
+
+	//filter
 
 	return c
 	//add
