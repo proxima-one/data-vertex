@@ -182,6 +182,7 @@ func LoadDirectives(c gql.Config) gql.Config {
 		// 	}
 		return next(ctx)
 	}
+}
 
 // func CreateDataloaders(db *proxima.ProximaDatabase) (*dataloader.Dataloader, error) {
 //   loader , err := dataloader.NewDataloader(db)
