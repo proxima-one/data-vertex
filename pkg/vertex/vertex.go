@@ -229,13 +229,13 @@ func (vertex *ProximaDataVertex) StartVertexServer() {
 	// })
 
 	//r.Use(auth.Middleware())
-	router.Use(cors.New(cors.Options{
+	r.Use(cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:4000"},
 		AllowCredentials: true,
 		Debug:            true,
 	}).Handler)
 
-	r.Use(dataloaders.Middleware(vertex.applicationDB))
+	r.Use(dataloader.Middleware(vertex.applicationDB))
 	//r.Use(validation.Middleware())
 
 	go r.POST("/query", vertex.query())
