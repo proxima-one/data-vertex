@@ -156,32 +156,32 @@ func CreateResolvers(db *proxima.ProximaDatabase) (gql.Config, error) {
 // }
 
 func LoadDirectives(c gql.Config) gql.Config {
-	c.Directives.HasRole = func(ctx context.Context, obj interface{}, next graphql.Resolver, role Role) (interface{}, error) {
-		if !getCurrentUser(ctx).HasRole(role) {
-			// 		// block calling the next resolver
-			return nil, fmt.Errorf("Access denied")
-		}
-		//
-		// 	// or let it pass through
-		return next(ctx)
-	}
-	c.Directives.isAuthenticated = func(ctx context.Context, obj interface{}, next graphql.Resolver, role Role) (interface{}, error) {
+
+	// c.Directives.HasRole = func(ctx context.Context, obj interface{}, next graphql.Resolver, role Role) (interface{}, error) {
+	// 	if role {
+	// 		// 		// block calling the next resolver
+	// 		return nil, fmt.Errorf("Access denied")
+	// 	}
+	// 	//
+	// 	// 	// or let it pass through
+	// 	return next(ctx)
+	// }
+
+	// enum Role {
+	//   ADMIN
+	//   USER
+	// }
+	//
+	// directive @useDefaultArgs on MUTATION | SUBSCRIPTION | QUERY
+	// directive @hasRole(role: Role!) on MUTATION
+
+	c.Directives.HasAuthentication = func(ctx context.Context, obj interface{}, next graphql.Resolver) (interface{}, error) {
 		// 	if !getCurrentUser(ctx).HasRole(role) {
 		// // 		// block calling the next resolver
 		// 		return nil, fmt.Errorf("Access denied")
 		// 	}
 		return next(ctx)
 	}
-
-	c.Directives.useDefaultArgs = func(ctx context.Context, obj interface{}, next graphql.Resolver) (interface{}, error) {
-		return next(ctx)
-	}
-
-	//filter
-
-	return c
-	//add
-}
 
 // func CreateDataloaders(db *proxima.ProximaDatabase) (*dataloader.Dataloader, error) {
 //   loader , err := dataloader.NewDataloader(db)
