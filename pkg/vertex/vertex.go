@@ -3,23 +3,24 @@ package vertex
 import (
 	"context"
 	"io/ioutil"
-	"net/http"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/handler"
 	"github.com/gin-gonic/gin"
+	dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
 	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql"
 	resolver "github.com/proxima-one/proxima-data-vertex/pkg/resolvers"
 	proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
+	cors "github.com/rs/cors/wrapper/gin"
 
 	//yaml "gopkg.in/yaml.v2"
-	"crypto/tls"
+
 	json "encoding/json"
 	"fmt"
 	"log"
 
 	yaml "github.com/ghodss/yaml"
-	"github.com/rs/cors"
+	//"github.com/rs/cors"
 )
 
 func LoadDataVertex(configFilePath, dbConfigFilePath string) (*ProximaDataVertex, error) {
@@ -129,7 +130,6 @@ func CreateDataVertex(config, dbConfig map[string]interface{}) (*ProximaDataVert
 }
 
 func CreateResolvers(db *proxima.ProximaDatabase) (gql.Config, error) {
-	var r gql.Config
 	// loader, err := CreateDataloaders(db)
 	// if err != nil {
 	// 	return r, err
@@ -182,6 +182,7 @@ func LoadDirectives(c gql.Config) gql.Config {
 		// 	}
 		return next(ctx)
 	}
+	return c
 }
 
 // func CreateDataloaders(db *proxima.ProximaDatabase) (*dataloader.Dataloader, error) {
@@ -210,13 +211,6 @@ func (vertex *ProximaDataVertex) StartVertexServer() {
 	//cert, _ := tls.LoadX509KeyPair( "localhost.crt", "localhost.key" )
 
 	// create a custom server with `TLSConfig`
-	s := &http.Server{
-		Addr:    ":4000",
-		Handler: r, // use `http.DefaultServeMux`gin router
-		TLSConfig: &tls.Config{
-			Certificates: []tls.Certificate{},
-		},
-	}
 
 	// srv.AddTransport(&transport.Websocket{
 	// 		Upgrader: websocket.Upgrader{
@@ -230,27 +224,30 @@ func (vertex *ProximaDataVertex) StartVertexServer() {
 	// })
 
 	//r.Use(auth.Middleware())
-	r.Use(cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:4000"},
-		AllowCredentials: true,
-		Debug:            true,
-	}).Handler)
 
 	r.Use(dataloader.Middleware(vertex.applicationDB))
-	//r.Use(validation.Middleware())
+
+	r.Use(cors.Default())
 
 	go r.POST("/query", vertex.query())
 	go r.GET("/", vertex.playgroundHandler())
 	//run  tl5 with server cert
 	//cert
 	//key
-	r.RunTL5(":4000")
+	r.RunTLS(":4000", "", "")
 }
 
 func (vertex *ProximaDataVertex) query() gin.HandlerFunc {
 	h := handler.GraphQL(vertex.executableSchema)
 	//middleware
-	//LoadMiddleware(h, )
+	// srv := &http.Server{
+	// 	Addr:    ":4000",
+	// 	Handler: h, // use `http.DefaultServeMux`gin router
+	// 	TLSConfig: &tls.Config{
+	// 		Certificates: []tls.Certificate{},
+	// 	},
+	// }
+	//LoadMiddleware(h,
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
