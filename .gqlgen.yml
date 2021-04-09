@@ -55,7 +55,7 @@ models:
       - github.com/99designs/gqlgen/graphql.Int32
   Float:
     model:
-      c
+      - github.com/99designs/gqlgen/graphql.Float
   Time:
     model:
       - github.com/99designs/gqlgen/graphql.Time
@@ -74,6 +74,5 @@ models:
       - github.com/99designs/gqlgen/graphql.Float
   #   model:
   #     - github.com/99designs/gqlgen/graphql.
-
 #uint
 #BigInt
