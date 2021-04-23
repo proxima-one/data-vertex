@@ -2,10 +2,12 @@ package vertex
 
 import (
 	_ "fmt"
-	proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
-	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/client"
 	_ "math/rand"
+
+	"github.com/99designs/gqlgen/client"
+	"github.com/99designs/gqlgen/graphql/handler"
+	proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
+
 	//graphql "github.com/graph-gophers/graphql-go"
 	"testing"
 	_ "time"
@@ -29,17 +31,17 @@ func TestDataVertex(t *testing.T) {
 	if dbConfigErr != nil {
 		t.Errorf("Database config reading error: %v", dbConfigErr)
 	}
-	var db *proxima.ProximaDatabase;
+	var db *proxima.ProximaDatabase
 
-	db, dbErr := CreateApplicationDatabase(dbConfig);
+	db, dbErr := CreateApplicationDatabase(dbConfig)
 	if dbErr != nil {
-	  t.Error("Error creating the database", dbErr);
+		t.Error("Error creating the database", dbErr)
 	}
 
-	_, dataloaderErr := CreateDataloaders(db)
-	if dataloaderErr != nil {
-		t.Error("Error creating the resolvers", dataloaderErr)
-	}
+	// _, dataloaderErr := CreateDataloaders(db)
+	// if dataloaderErr != nil {
+	// 	t.Error("Error creating the resolvers", dataloaderErr)
+	// }
 
 	_, resolverErr := CreateResolvers(db)
 	if resolverErr != nil {
@@ -79,7 +81,6 @@ func TestDataVertexResolvers(t *testing.T) {
 	var configFilePath string = "../../app-config.yml"
 	var dbConfigFilePath string = "../../database/db-config.yaml"
 
-
 	var testConfigFilePath string = "../../testdata/vertex_entities.json"
 	var testAppQueriesFilePath string = "../../testdata/vertex_queries.json"
 
@@ -95,12 +96,11 @@ func TestDataVertexResolvers(t *testing.T) {
 	c := client.New(handler.NewDefaultServer(applicationVertex.executableSchema))
 	//get vertex handler/init the client
 
-  RunEntityTestCases(c, t, entityTests, 100)
+	RunEntityTestCases(c, t, entityTests, 100)
 	// for name, entityTest := range entityTests {
 	// 	go entityTest.runTests(t, 100)
 	// }
 }
-
 
 func BenchmarkVertexResolvers(b *testing.B) {
 	b.StopTimer()

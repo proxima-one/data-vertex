@@ -2,6 +2,7 @@ FROM golang:alpine
 RUN mkdir /app
 ADD . /app/
 WORKDIR /app
-RUN go build -o -i main .
+RUN go build -o main .
 EXPOSE 4000
-CMD ["./main"]
+RUN chmod
+CMD ["sudo ./main"]

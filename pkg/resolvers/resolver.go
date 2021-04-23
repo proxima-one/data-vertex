@@ -29,7 +29,27 @@ func (r *Resolver) Mutation() gql.MutationResolver {
 type queryResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 
-//AUTOGEN RESOLVERS
+
+type dPoolResolver struct{ *Resolver }
+type dPoolListResolver struct{ *Resolver }
+type depositResolver struct{ *Resolver }
+type funderResolver struct{ *Resolver }
+type funderTotalInterestResolver struct{ *Resolver }
+type fundingResolver struct{ *Resolver }
+//type mutationResolver struct{ *Resolver }
+//type queryResolver struct{ *Resolver }
+type userResolver struct{ *Resolver }
+type userTotalDepositResolver struct{ *Resolver }
+
+func (r *Resolver) DPool() gql.DPoolResolver {return &dPoolResolver{r}}
+func (r *Resolver) DPoolList() gql.DPoolListResolver {return &dPoolListResolver{r}}
+func (r *Resolver) Deposit() gql.DepositResolver {return &depositResolver{r}}
+func (r *Resolver) Funder() gql.FunderResolver {return &funderResolver{r}}
+func (r *Resolver) FunderTotalInterest() gql.FunderTotalInterestResolver {return &funderTotalInterestResolver{r}}
+func (r *Resolver) Funding() gql.FundingResolver {return &fundingResolver{r}}
+func (r *Resolver) User() gql.UserResolver {return &userResolver{r}}
+func (r *Resolver) UserTotalDeposit() gql.UserTotalDepositResolver {return &userTotalDepositResolver{r}}
+
 
 func NewResolver(db *proxima.ProximaDatabase) gql.ResolverRoot {
 	return &Resolver{db: db}

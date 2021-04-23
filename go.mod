@@ -1,7 +1,7 @@
 module github.com/proxima-one/proxima-data-vertex
 
 require (
-	github.com/99designs/gqlgen v0.13.0
+	github.com/99designs/gqlgen v0.12.2
 	github.com/agnivade/levenshtein v1.1.0 // indirect
 	github.com/alexkohler/nakedret v1.0.0 // indirect
 	github.com/ghodss/yaml v1.0.0

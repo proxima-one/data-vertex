@@ -1,11 +1,11 @@
-name: Proxima
-id: ProximaID
+id: 88mph-data-vertex
+name: 88mph-data-vertex
+repo: None
+description: None
 version: 0.0.0
-repo: Here
-description: Here
 schema:
   file: ./schema/schema.graphql
-  dir: Test_Project/schema
+  dir: 88mph-data-vertex/schema
 datasources:
   - name: cUSDCPool
     client:
@@ -25,3 +25,111 @@ datasources:
         file: ./abi/ERC20.json
       - name: MPHMinter
         file: ./abi/MPHMinter.json
+  - name: aUSDCPool
+    client:
+      name: ethereum
+      network: mainnet
+      startBlock: 10634502
+    source:
+      address: "0xb5EE8910A93F8A450E97BE0436F36B9458106682"
+      abi: DInterest
+      startBlock: 11172905
+    contracts:
+      - name: DInterest
+        file: ./abi/DInterest.json
+      - name: IInterestOracle
+        file: ./abi/IInterestOracle.json
+      - name: ERC20
+        file: ./abi/ERC20.json
+      - name: MPHMinter
+        file: ./abi/MPHMinter.json
+  - name: cUNIPool
+    client:
+      name: ethereum
+      network: mainnet
+      startBlock: 10634502
+    source:
+      address: "0xF9761c1A244C66E40cF9B7EfB4b0C29b562B6bC0"
+      abi: DInterest
+      startBlock: 11172905
+    contracts:
+      - name: DInterest
+        file: ./abi/DInterest.json
+      - name: IInterestOracle
+        file: ./abi/IInterestOracle.json
+      - name: ERC20
+        file: ./abi/ERC20.json
+      - name: MPHMinter
+        file: ./abi/MPHMinter.json
+  - name: yyCRVPool
+    client:
+      name: ethereum
+      network: mainnet
+      startBlock: 10634502
+    source:
+      address: "0x25a5feB5aC6533fE3C4E8E8e2a55f9E1f1F8E5f0"
+      abi: DInterest
+      startBlock: 11172905
+    contracts:
+      - name: DInterest
+        file: ./abi/DInterest.json
+      - name: IInterestOracle
+        file: ./abi/IInterestOracle.json
+      - name: ERC20
+        file: ./abi/ERC20.json
+      - name: MPHMinter
+        file: ./abi/MPHMinter.json
+  - name: ycrvSBTCPool
+    client:
+      name: ethereum
+      network: mainnet
+      startBlock: 10634502
+    source:
+      address: "0xD42F7c7463B261fAc72510C638A877690beA8d68"
+      abi: DInterest
+      startBlock: 11172905
+    contracts:
+      - name: DInterest
+        file: ./abi/DInterest.json
+      - name: IInterestOracle
+        file: ./abi/IInterestOracle.json
+      - name: ERC20
+        file: ./abi/ERC20.json
+      - name: MPHMinter
+        file: ./abi/MPHMinter.json
+  - name: Rewards
+    client:
+      name: ethereum
+      network: mainnet
+      startBlock: 10634502
+    source:
+      address: "0xbf724db570B9Cf3a8deD903055BcaA863CE07ad7"
+      abi: Rewards
+      startBlock: 11239803
+    contracts:
+      - name: Rewards
+        file: ./abi/Rewards.json
+  - name: MPHToken
+    client:
+      name: ethereum
+      network: mainnet
+      startBlock: 10634502
+    source:
+      address: "0x75A1169E51A3C6336Ef854f76cDE949F999720B1"
+      abi: MPHToken
+      startBlock: 11172905
+    contracts:
+      - name: MPHToken
+        file: ./abi/MPHToken.json
+# templates:
+#   - name: NFT
+#     client:
+#       name: ethereum
+#       network: mainnet
+#       startBlock: 10634502
+#     source:
+#       abi: NFT
+#       startBlock: 11172905
+#     contracts:
+#       - name: NFT
+#         file: ./abi/NFT.json

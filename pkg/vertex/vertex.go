@@ -1,7 +1,6 @@
 package vertex
 
 import (
-	"context"
 	"io/ioutil"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -11,7 +10,6 @@ import (
 	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql"
 	resolver "github.com/proxima-one/proxima-data-vertex/pkg/resolvers"
 	proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
-	cors "github.com/rs/cors/wrapper/gin"
 
 	//yaml "gopkg.in/yaml.v2"
 
@@ -175,30 +173,36 @@ func LoadDirectives(c gql.Config) gql.Config {
 	// directive @useDefaultArgs on MUTATION | SUBSCRIPTION | QUERY
 	// directive @hasRole(role: Role!) on MUTATION
 
-	c.Directives.HasAuthentication = func(ctx context.Context, obj interface{}, next graphql.Resolver) (interface{}, error) {
-		// 	if !getCurrentUser(ctx).HasRole(role) {
-		// // 		// block calling the next resolver
-		// 		return nil, fmt.Errorf("Access denied")
-		// 	}
-		return next(ctx)
-	}
+	// c.Directives.HasAuthentication = func(ctx context.Context, obj interface{}, next graphql.Resolver) (interface{}, error) {
+	// 	if !getCurrentUser(ctx).HasRole(role) {
+	// // 		// block calling the next resolver
+	// 		return nil, fmt.Errorf("Access denied")
+	// 	}
+	// 	return next(ctx)
+	// }
 	return c
 }
 
 // func CreateDataloaders(db *proxima.ProximaDatabase) (*dataloader.Dataloader, error) {
-//   loader , err := dataloader.NewDataloader(db)
-//   if err != nil {
-//     return nil, err
-//   }
-//   return loader, nil
+// 	loader, err := dataloader.NewDataloader(db)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return loader, nil
 // }
 
 func CreateApplicationDatabase(db_config map[string]interface{}) (*proxima.ProximaDatabase, error) {
+	//fmt.Println(db_config)
 	proximaDB, err := proxima.LoadProximaDatabase(db_config)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
-	proximaDB.Open()
+	_, err = proximaDB.Open()
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
 	//proximaDB.Sync()
 	return proximaDB, nil
 }
@@ -227,14 +231,14 @@ func (vertex *ProximaDataVertex) StartVertexServer() {
 
 	r.Use(dataloader.Middleware(vertex.applicationDB))
 
-	r.Use(cors.Default())
+	//r.Use(cors.Default())
 
 	go r.POST("/query", vertex.query())
 	go r.GET("/", vertex.playgroundHandler())
 	//run  tl5 with server cert
 	//cert
 	//key
-	r.RunTLS(":4000", "", "")
+	r.Run(":4000")
 }
 
 func (vertex *ProximaDataVertex) query() gin.HandlerFunc {
