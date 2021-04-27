@@ -132,9 +132,7 @@ func CreateResolvers(db *proxima.ProximaDatabase) (gql.Config, error) {
 	// if err != nil {
 	// 	return r, err
 	// }
-	c := gql.Config{
-		Resolvers: resolver.NewResolver(db),
-	}
+	c := resolver.NewResolver(db)
 	//Load directives
 	c = LoadDirectives(c)
 

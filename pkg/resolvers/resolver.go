@@ -2,13 +2,18 @@ package resolvers
 
 //go:generate go run github.com/99designs/gqlgen
 import (
+	//dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
 	dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
 	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql"
 	_ "github.com/proxima-one/proxima-data-vertex/pkg/models"
+	proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
 )
 
+var DefaultInputs map[string]interface{}
+
 type Resolver struct {
-	loader *dataloader.Dataloader
+	//loader *dataloader.Dataloader
+	db *proxima.ProximaDatabase
 }
 
 func (r *Resolver) Query() gql.QueryResolver {
