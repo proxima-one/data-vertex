@@ -3,7 +3,7 @@ package resolvers
 //go:generate go run github.com/99designs/gqlgen
 import (
 	//dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
-	dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
+	//dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
 	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql"
 	_ "github.com/proxima-one/proxima-data-vertex/pkg/models"
 	proxima "github.com/proxima-one/proxima-db-client-go/pkg/database"
@@ -32,9 +32,9 @@ type mutationResolver struct{ *Resolver }
 /*
 resolver - database and loader
 */
-func NewResolver(loader *dataloader.Dataloader) gql.Config {
+func NewResolver(db *proxima.ProximaDatabase) gql.Config {
 	r := Resolver{}
-	r.loader = loader
+	r.db = db
 	return gql.Config{
 		Resolvers: &r,
 	}
