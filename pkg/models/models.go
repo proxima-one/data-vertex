@@ -1,3 +1,6 @@
 package models
 
-type Proof struct{}
+type Proof struct {
+	Proof *string
+	Root  *string
+}
