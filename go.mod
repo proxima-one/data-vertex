@@ -10,6 +10,7 @@ require (
 	github.com/gordonklaus/ineffassign v0.0.0-20210225214923-2e10b2664254 // indirect
 	github.com/graph-gophers/graphql-go v0.0.0-20201113091052-beb923fada29
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
+	github.com/jgautheron/goconst v1.4.0 // indirect
 	github.com/json-iterator/go v1.1.10
 	github.com/kisielk/errcheck v1.6.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
