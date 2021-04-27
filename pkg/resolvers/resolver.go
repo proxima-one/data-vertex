@@ -2,8 +2,6 @@ package resolvers
 
 //go:generate go run github.com/99designs/gqlgen
 import (
-	_ "fmt"
-
 	_ "github.com/json-iterator/go"
 	//dataloader "github.com/proxima-one/proxima-data-vertex/pkg/dataloaders"
 	gql "github.com/proxima-one/proxima-data-vertex/pkg/gql"
@@ -28,8 +26,6 @@ func (r *Resolver) Mutation() gql.MutationResolver {
 
 type queryResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
-
-//AUTOGEN RESOLVERS
 
 func NewResolver(db *proxima.ProximaDatabase) gql.ResolverRoot {
 	return &Resolver{db: db}
