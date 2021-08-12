@@ -26,7 +26,7 @@ func LoadDataVertex(configFilePath, dbConfigFilePath string) (*ProximaDataVertex
 	if configErr != nil {
 		log.Fatalf("Application config reading error: %v", configErr)
 	}
-	dbConfig, dbErr := getDBConfig(dbConfigFilePath)
+	dbConfig, dbErr := proxima.ReadConfigFromFile(dbConfigFilePath) //getDBConfig(dbConfigFilePath)
 	if dbErr != nil {
 		log.Fatalf("Database config readig error: %v", dbErr)
 	}
@@ -110,7 +110,7 @@ type ProximaDataVertex struct {
 	executableSchema graphql.ExecutableSchema
 }
 
-func CreateDataVertex(config, dbConfig map[string]interface{}) (*ProximaDataVertex, error) {
+func CreateDataVertex(config map[string]interface{}, dbConfig proxima.DatabaseConfig) (*ProximaDataVertex, error) {
 	database, dErr := CreateApplicationDatabase(dbConfig)
 	if dErr != nil {
 		return nil, dErr
@@ -189,9 +189,9 @@ func LoadDirectives(c gql.Config) gql.Config {
 // 	return loader, nil
 // }
 
-func CreateApplicationDatabase(db_config map[string]interface{}) (*proxima.ProximaDatabase, error) {
+func CreateApplicationDatabase(db_config proxima.DatabaseConfig) (*proxima.ProximaDatabase, error) {
 	//fmt.Println(db_config)
-	proximaDB, err := proxima.LoadProximaDatabase(db_config)
+	proximaDB, err := proxima.LoadDatabase(db_config)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
